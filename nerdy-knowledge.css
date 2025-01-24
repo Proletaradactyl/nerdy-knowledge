@@ -1,0 +1,104 @@
+h1 , h2 {
+    font-family: "VT323", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body,html {
+    height: 100%;
+    background-color: rgb(174 103 254);
+}
+
+#headertext {
+    font-size: 400%;
+}
+
+.hero-image {
+    background-image: url(img/1.png);
+    height: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.hero-text {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+button {
+    font-family: "VT323", serif;
+    font-size: 200%;
+    background-color: aquamarine;
+    border: 4px, dashed, rgb(174 103 254);
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+
+#readysection {
+    background-color: aquamarine;
+    padding: 5%;
+}
+#readyheader {
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    color: white;
+    font-size: 80px;
+}
+
+
+.box {
+    background-color: black; /* Black background */
+    color: white;
+    border: 4px solid;
+    display: flex;
+    align-items: center; /* Center content vertically within each box */
+    justify-content: center; /* Center content horizontally within each box */
+    font-size: 1.5rem;
+    padding: 5%;
+    max-width: 600px; /* Maximum width of 600px */
+    width: 100%; /* Adjust width to fit parent container */
+    margin: 10px auto; /* Add space between boxes and center them */
+}
+
+.container {
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    justify-content: center; /* Center all boxes horizontally */
+    gap: 20px; /* Add space between boxes */
+}
+
+.leaderboard {
+    border-color: cyan; /* Cyan border */
+    font-family: "VT323", serif;
+    font-size: 20px;
+}
+
+.how-to-play {
+    display: block;
+    border-color: magenta; /* Magenta border */
+    font-family: "VT323", serif;
+    font-size: 20px;
+}
+
+
+.welcome-text {
+    font-family: "VT323", serif;
+    font-size: 30px;
+    padding: 5px;
+    margin-top: 1%;
+    color: white;
+}
+
+#gamestart {
+    background-color: black;
+    padding: 20%;
+    color: white;
+    text-align: center;
+}
