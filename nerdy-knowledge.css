@@ -80,6 +80,10 @@ button {
     font-size: 20px;
 }
 
+#leaderboard-title {
+    margin-bottom: 10px; /* Adjust this value to control the spacing */
+}
+
 .how-to-play {
     display: block;
     border-color: magenta; /* Magenta border */
