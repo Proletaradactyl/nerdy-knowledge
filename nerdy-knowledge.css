@@ -78,6 +78,7 @@ button {
     border-color: cyan; /* Cyan border */
     font-family: "VT323", serif;
     font-size: 20px;
+    display: block;
 }
 
 #leaderboard-title {
@@ -106,3 +107,27 @@ button {
     color: white;
     text-align: center;
 }
+
+.audio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  #playPauseBtn {
+    background-color: magenta;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  #playPauseBtn:hover {
+    background-color: cyan;
+  }
+  
+  #volumeControl {
+    width: 150px;
+  }

@@ -4,23 +4,50 @@ document.addEventListener('DOMContentLoaded', function() {
     const gameSection = document.querySelector('#gamestart');
     const scoreDisplay = document.querySelector('#gamestart p');
     let score = 0;
+    let currentQuestionIndex = 0; // Keep track of the current question index
 
     // Load leaderboard from localStorage or initialize as an empty array
     let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
     // Add event listener to the start button
     startButton.addEventListener('click', startGame);
+
+  window.onload = function() {
+    var audio = document.querySelector('audio');
+    audio.play().catch(function(error) {
+      console.log('Audio playback failed:', error);
+    });
+   }
+
+   const audio = document.getElementById('myAudio');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const volumeControl = document.getElementById('volumeControl');
+
+playPauseBtn.addEventListener('click', function() {
+  if (audio.paused) {
+    audio.play();
+    playPauseBtn.textContent = 'Pause';
+  } else {
+    audio.pause();
+    playPauseBtn.textContent = 'Play';
+  }
+});
+
+volumeControl.addEventListener('input', function() {
+  audio.volume = volumeControl.value;
+});
  
     // Function to start the game
     async function startGame() {
         score = 0;
         scoreDisplay.textContent = 'Game Score: 0';
         startButton.disabled = true;
+        currentQuestionIndex = 0; // Reset to first question
 
-         // Try to fetch trivia questions 
+        // Try to fetch trivia questions 
         try {
             const questions = await fetchTriviaQuestions();
-            displayQuestions(questions);
+            displayQuestion(questions); // Display the first question
         } catch (error) {
             console.error('Error fetching trivia questions:', error);
         }
@@ -34,37 +61,42 @@ document.addEventListener('DOMContentLoaded', function() {
         return data.results;
     }
 
-    // Function to display trivia questions
-    function displayQuestions(questions) {
-        gameSection.innerHTML = '<h2>Begin!</h2>'; // Clear the game section
-        questions.forEach((question, index) => {
-            const questionElement = document.createElement('div'); // Create a div for each question
-            questionElement.classList.add('question');
-            questionElement.dataset.correctAnswer = question.correct_answer; // Add correct answer here
-            // Display question and answers
-            questionElement.innerHTML = ` 
-                <h3>Question ${index + 1}: ${question.question}</h3> 
-                <ul>
-                    ${shuffleArray([...question.incorrect_answers, question.correct_answer]).map(answer => `
-                        <li><button class="answer-btn">${answer}</button></li>
-                    `).join('')}
-                </ul>
-            `;
-            gameSection.appendChild(questionElement); // Append question to the game section
-        });
+    // Function to display a single trivia question
+    function displayQuestion(questions) {
+        if (currentQuestionIndex >= questions.length) {
+            endGame(); // End the game when all questions are answered
+            return;
+        }
+
+        const question = questions[currentQuestionIndex];
+        gameSection.innerHTML = '<h2>Question:</h2>'; // Clear previous question
+        const questionElement = document.createElement('div');
+        questionElement.classList.add('question');
+        questionElement.dataset.correctAnswer = question.correct_answer; // Add correct answer here
+        
+        // Display question and answers
+        questionElement.innerHTML = ` 
+            <h3>${question.question}</h3> 
+            <ul>
+                ${shuffleArray([...question.incorrect_answers, question.correct_answer]).map(answer => `
+                    <li><button class="answer-btn">${answer}</button></li>
+                `).join('')}
+            </ul>
+        `;
+        gameSection.appendChild(questionElement); // Append question to the game section
 
         // Add event listeners to answer buttons
         const answerButtons = document.querySelectorAll('.answer-btn');
         answerButtons.forEach(button => {
-            button.addEventListener('click', checkAnswer);
+            button.addEventListener('click', (event) => checkAnswer(event, questions));
         });
     }
 
     // Function to check the selected answer
-    function checkAnswer(event) {
+    function checkAnswer(event, questions) {
         const selectedAnswer = event.target.textContent;
         const questionElement = event.target.closest('.question');
-        const correctAnswer = questionElement.dataset.correctAnswer; // Store correct answer in dataset
+        const correctAnswer = questionElement.dataset.correctAnswer;
 
         // Check if the selected answer is correct
         if (selectedAnswer === correctAnswer) {
@@ -75,15 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
             event.target.style.backgroundColor = 'salmon'; // Change button color to red
         }
 
-        // Removes question within 1 second of receiving user's answer
+        // Move to next question after a short delay
         setTimeout(() => {
-            questionElement.remove();
-            if (document.querySelectorAll('.question').length === 0) {
-                endGame();
-            }
-        }, 2000);
+            currentQuestionIndex++;
+            displayQuestion(questions); // Display next question
+        }, 1000); // Adjust this delay as needed
     }
 
+    // End the game
     function endGame() {
         gameSection.innerHTML = `<h2>Game Over!</h2><p>Your final score is ${score}.</p>`;
         
@@ -106,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to display the leaderboard
     function displayLeaderboard() {
         const leaderboardBox = document.querySelector('.leaderboard');
-        leaderboardBox.innerHTML = '<h3>Leaderboard</h3>';
+        leaderboardBox.innerHTML = '<h3>Leaderboard </h3>';
         
         // Display top 5 players
         leaderboard.slice(0, 5).forEach((entry, index) => {
