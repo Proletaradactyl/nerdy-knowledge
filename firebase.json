@@ -9,7 +9,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/nerdy-knowledge.html"
+        "destination": "/index.html"
       }
     ]
   }
